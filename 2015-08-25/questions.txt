@@ -21,3 +21,22 @@ Consider the following questions:
 2. What about a simple model to predict time for one person to count?
 3. How big should the class be before the parallel method takes less time?
 
+1. Suppose there are k rows in the class. A simple model would say that X 
+is the sum of the serial start time, the time it takes to count the row with 
+the most people, and the time needed to collect the k subtotals the time for
+making k additions.
+	X = Explaining + (Max_Row_# x Count_Time) + k*(Collection_Time + Adding_Time)
+This model assumes that the time needed to count an individual is consistent
+across all students.
+
+2. Assume that there is no need to explain the process when one person counts.
+A simple model would say that X is the sum of the serial start time and the time 
+needed to count all the individuals. If there are n students in the class, then
+	X = n x Count_Time
+
+3. To make a fair comparison, we should further assume that the class is spread
+out roughly uniformly over k rows so that each row contains approximately n/k
+people. Then the model for part 1 will be
+	X = Explaining + (k/n * Count_Time) + k*(Collection_Time + Adding_Time)
+We could find a cut-off point by setting the two model equations equal to each
+other and solving for the value of n.
