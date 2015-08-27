@@ -1,4 +1,4 @@
-## Reading questions
+## Reading questions - David Eckman
 
 1.  A given program spends 10% of its time in an initial startup
     phase, and then 90% of its time in work that can be easily
@@ -8,13 +8,27 @@
     you should use a script to produce this plot, with both the serial
     fraction and the maximum number of cores as parameters.
 
+    See Speedup.png and Efficiency.png attached. The upper bound on the 
+    speedup calculated by Amdahl's Law is 10.
+
 2.  Suppose a particular program can be partitioned into perfectly
     independent tasks, each of which takes time tau.  Tasks are
     set up, scheduled, and communicated to p workers at a (serial)
     central server; this takes an overhead time alpha per task.
     What is the theoretically achievable throughput (tasks/time)?
 
+    As the number of workers is increased, the bottleneck will be the
+    serial overhead time of alpha per task. Therefore the limiting 
+    throughput will be 1/alpha tasks/time.
+
 3.  Under what circumstances is it best to not tune?
+    
+    1) If the program is only going to be run once and the potential
+    speedup in machine time is not worth the human time needed to tune.
+    2) The manipulation involved with tuning the code would make it
+    harder for another user to understand it.
+    3) The current runtime of the program is already "practically" fast
+    enough, although greater speedup is possible.
 
 4.  The class cluster consists of eight nodes and fifteen Xeon Phi
     accelerator boards.  Based on an online search for information on
@@ -24,4 +38,28 @@
     in your calculation.  (We will return to this question again after
     we cover some computer architecture.)
     
+    According to the Intel website, the theoretical peak flop rate
+    (double-precision) for a single Xeon Phi 5110P board is 1,011 
+    gigaflops/second. With 15 such boards, their combined flop rate is
+    16,176 gigaflops/second.
+
+    For the Xeon E5-2620 processors, the Intel specs sheet gives a gigaflop
+    rate of 120 gigaflops/second for a single core (with Max Turbo). With
+    8 12-core nodes, this gives 96 x 120 = 11,520 gigaflops/second.
+
+    In total, our cluster has a theoretical peak of 16,176 + 11,520 =
+    27,696 gigaflops/second.
+
+    References:
+    http://www.intel.com/content/www/us/en/benchmarks/server/xeon-phi/xeon-phi-theoretical-maximums.html
+    http://download.intel.com/support/processors/xeon/sb/xeon_E5-2600.pdf
+
 5.  What is the approximate theoretical peak flop rate for your own machine?
+    
+    My workstation machine is a Dell OptiPlex 7020 with an Intel i7-4790 CPU.
+    It runs at 3.60 GHz (4 GHz on Max Turbo) on 4 cores. From what I found online,
+    its peak flop rate is ~34 gigaflops/second.
+
+    References:
+    http://ark.intel.com/products/80806/Intel-Core-i7-4790-Processor-8M-Cache-up-to-4_00-GHz
+    https://setiathome.berkeley.edu/cpu_list.php
