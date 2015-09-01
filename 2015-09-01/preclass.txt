@@ -43,6 +43,11 @@ with questions for class!
     timings-heat.pdf; what can you tell about the cache architecture
     on your machine from the plot?
 
+    My plot timings-heat.pdf looks similar to the one shown in class.
+    The dark blue diagonal on the right-hand side suggests 8-way associativity
+    since it is three blocks wide. The worst timing is when the stride is 2^14
+    and the size of the array is 2^26.
+
 6.  From the cloned repository, check out the totient branch:
 
        git checkout totient
@@ -51,6 +56,12 @@ with questions for class!
     If you prefer, you can also look at the files on GitHub.  Either
     way, repeat the exercise of problem 5.  What can you tell about
     the cache architecture of the totient nodes?
+
+    The plot timings-heat.pdf found in the totient branch also shows 8-way
+    associativity from the three block wide diagonal on the right. However in
+    this case, the worst timing comes on arrays of size 2^25 or 2^26 when
+    the stride is between 2^6 and 2^22. This may suggest that the L2 cache
+    is limited to holding 2^24 floating points numbers.
 
 7.  Implement the following three methods of computing the centroid
     of a million two-dimensional coordinates (double precision).
@@ -69,3 +80,6 @@ with questions for class!
     compiler.  To do this, run "module load cs5220" and run (e.g.)
 
         icc -o centroid centroid.c
+
+    I complied the code as directed, but the output file "centroid" contained
+    garbage. I wasn't able to read the timing data in the file.
