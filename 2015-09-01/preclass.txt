@@ -11,12 +11,41 @@ with questions for class!
     you computed this, and give URLs for where you got the parameters
     in your calculation.  (We will return to this question again after
     we cover some computer architecture.)
+	
+	According to the Intel website, the theoretical peak flop rate
+    (double-precision) for a single Xeon Phi 5110P board is 1,011 
+    gigaflops/second. With 15 such boards, their combined flop rate is
+    15,165 gigaflops/second. (This is a correction from my answer last time)
+
+    For the Xeon E5-2620 processors, the Intel specs sheet gives a gigaflop
+    rate of 120 gigaflops/second for a single core (with Max Turbo). With
+    8 12-core nodes, this gives 96 x 120 = 11,520 gigaflops/second.
+
+    In total, our cluster has a theoretical peak of 15,165 + 11,520 =
+    26,685 gigaflops/second.
+
+    References:
+    http://www.intel.com/content/www/us/en/benchmarks/server/xeon-phi/xeon-phi-theoretical-maximums.html
+    http://download.intel.com/support/processors/xeon/sb/xeon_E5-2600.pdf
     
 2.  What is the approximate theoretical peak flop rate for your own machine?
+
+	My workstation machine is a Dell OptiPlex 7020 with an Intel i7-4790 CPU.
+    It runs at 3.60 GHz (4 GHz on Max Turbo) on 4 cores. From what I found online,
+    its peak flop rate is ~34 gigaflops/second.
+
+    References:
+    http://ark.intel.com/products/80806/Intel-Core-i7-4790-Processor-8M-Cache-up-to-4_00-GHz
+    https://setiathome.berkeley.edu/cpu_list.php
 
 3.  Suppose there are t tasks that can be executed in a pipeline
     with p stages.  What is the speedup over serial execution of the
     same tasks?
+	
+	Assuming a unit time for each stage:
+	T_serial = t*p
+	T_pipeline = p+t-1
+	Speedup = S(p) = (t*p)/(p+t-1)
 
 4.  Consider the following list of tasks (assume they can't be pipelined):
 
@@ -31,6 +60,14 @@ with questions for class!
     a compiled application?  What is the minimum parallel time given
     an arbitrary number of processors?
 
+	Minimum serial time = 1 + 0.5 + 0.25 + 0.5 + 0.5 = 2.75 hr
+	Minimum parallel time = 1 + 0.25 + 0.5 + 0.5 = 2.25 hr
+	
+	In the parallel process, we compile GCC, then compile OpenMPI and 
+	OpenBLAS at the same time. Once OpenBLAS finishes, we compile LAPACK.
+	One LAPACK finishes, we compile the application. Because of the
+	dependency of the tasks, we cannot fully parallelize the operation.	
+	
 5.  Clone the membench repository from GitHub:
 
        git clone git@github.com:cornell-cs5220-f15/membench.git
