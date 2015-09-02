@@ -118,5 +118,13 @@ with questions for class!
 
         icc -o centroid centroid.c
 
-    I complied the code as directed, but the output file "centroid" contained
-    garbage. I wasn't able to read the timing data in the file.
+    When I used the intel compiler, all of the times were zero. However when I
+    used the GCC compiler, I got the following times:
+        Version 1: 8.800000e-03
+        Version 2: 1.040000e-02
+        Version 3: 7.000000e-03
+
+    Note surprisingly, Version 3 is the fastest because all of the data
+    that is read in is located in contiguous memory. Version 2 is the slowest
+    because it passes through the data twice with a stride of 2.
+
