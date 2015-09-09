@@ -23,18 +23,20 @@ the memory-based AI of this code? (Hint: What is the memory-based AI of just the
 innermost loop?)
 
 In the following answers, I rescale AI intensity to be in base units of operations
-per double-precision floating point number
+per double-precision floating point number instead of operations per byte.
 
-# flops for inner loop is 2N
-# bytes transferred is 2N numbers
+For this problem:
+# flops for inner loop = 2N
+# numbers transferred = 2N
 AI = (2N)/(2N) = 1
 
 2. Now suppose that the cache is substantially larger than 16N, but
 substantially smaller than 8N^2. What is the AI now?
 
-If the matrices are mapped naively:
-# flops for inner loop is 2N
-# bytes transferred is N numbers
+Assuming the two matrices A and B are both mapped to memory in the same way
+(by row or by column):
+# flops for inner loop = 2N
+# numbers transferred = N
 AI = (2N)/(N) = 2 
 
 3. Now suppose the cache is large enough to hold all of A, B, and C. What is the
@@ -44,8 +46,8 @@ the written data back to main memory.)
 
 Arithmetic intensity for the whole procedure:
 
-# flops is 2N^3
-# bytes transferred is 2N^2*bytes
+# flops = 2N^3
+# numbers transferred = 2N^2*bytes
 AI = (2N^3)/(2N^2) = N
 
 
@@ -54,19 +56,50 @@ KB, 256 KB, and 6 MB respectively. What is the largest problem size N that will
 fit in each cache? What is the arithmetic intensity associated with each problem
 size?
 
-Want to store A, B, and C all in a level of cache.
+Want to store A, B, and C all in the same level of cache.
 
 L1 Cache:
-	32KB/ (8 bytes * 3) = 1333 numbers/matrix
-	sqrt(1333) = 36.5 numbers/matrix
-	N = floor(36.5) = 36
+32KB / (8 bytes * 3) = 1365 numbers/matrix
+sqrt(1365) = 36.95 numbers/row
+N = floor(36.95) = 36 numbers/row
+AI = same as question 3 = (2N^3)/(2N^2) = N
+
+L2 Cache:
+256KB / (8 bytes * 3) = 10,923 numbers/matrix
+sqrt(10923) = 104.5 numbers/row
+N = floor(104.5) = 104 numbers/row
+AI = same as question 3 = (2N^3)/(2N^2) = N
+
+L3 Cache:
+6MB / (8 bytes * 3) = 262,144 numbers/matrix
+sqrt(262144) = 512 numbers/row
+N = floor(512) = 512 numbers/row
+AI = same as question 3 = (2N^3)/(2N^2) = N
 
 5. My CPU has 4 cores, each of which can do 8 fused multiply-adds per cycle, has
 a clock rate of 2.4 GHz, and a memory bandwidth of 25.6 GB/s. At what arithmetic
 intensity does my machine become CPU-bound?
 
+The clock rate of 2.4 GHz says that the CPU does 2.4 billion cycles per second.
+With four cores and 8 FMAs/cycle, the CPU can do 32 flops/cycle.
+Thus we have a peak flop rate of 2.4GHz*32 (flops/cycle) = 76.8 GFlops
+
+The arithmetic intensity at which the machine becomes CPU-bound will then be
+76.8 GFlop/s / 25.6 GB/s = 3.
 
 6. So, for what size range for N will naive matmul be CPU-bound on my machine?
 
+For naive matmul, we saw that for questions 1 and 2, the arithmetic intensities
+are one and two respectively. These are when the size of the problem is so big
+that the cache can either not hold a row, or a matrix being multiplied.
+With arithmetic intensities this low, the machine will not be CPU bound.
+
+But as we saw in question 3, when the matrices are sufficiently small, the
+AI is N. So for N=1 or N=2, the arithmetic intensity will again not be a problem.
+From question 4, we saw that the largest value of N for a NxN matrix to fit entirely
+in a 256KB cache is N = 36. So for 3 <= N <= 36, the machine will be CPU-bound.
 
 7. So, what will a plot of Flops/sec vs N look like?
+
+A plot of Flops/sec vs N would be low when the machine is CPU-bound (3 <= N <= 36)
+and high when the machine is not CPU-bound (N <= 2) and (N > 36).
