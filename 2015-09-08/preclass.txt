@@ -22,15 +22,31 @@ something into an already-full cache.
 the memory-based AI of this code? (Hint: What is the memory-based AI of just the
 innermost loop?)
 
+In the following answers, I rescale AI intensity to be in base units of operations
+per double-precision floating point number
+
+# flops for inner loop is 2N
+# bytes transferred is 2N numbers
+AI = (2N)/(2N) = 1
 
 2. Now suppose that the cache is substantially larger than 16N, but
 substantially smaller than 8N^2. What is the AI now?
 
+If the matrices are mapped naively:
+# flops for inner loop is 2N
+# bytes transferred is N numbers
+AI = (2N)/(N) = 2 
 
 3. Now suppose the cache is large enough to hold all of A, B, and C. What is the
 AI now? (Hint: Writing to a byte of memory not already in the cache incurs two
 memory transfers: one to move the data to the cache for writing, and one to move
 the written data back to main memory.)
+
+Arithmetic intensity for the whole procedure:
+
+# flops is 2N^3
+# bytes transferred is 2N^2*bytes
+AI = (2N^3)/(2N^2) = N
 
 
 4. Cache overflowing. On my CPU (Intel i7-4700 HQ), L1, L2, and L3 caches are 32
@@ -38,6 +54,12 @@ KB, 256 KB, and 6 MB respectively. What is the largest problem size N that will
 fit in each cache? What is the arithmetic intensity associated with each problem
 size?
 
+Want to store A, B, and C all in a level of cache.
+
+L1 Cache:
+	32KB/ (8 bytes * 3) = 1333 numbers/matrix
+	sqrt(1333) = 36.5 numbers/matrix
+	N = floor(36.5) = 36
 
 5. My CPU has 4 cores, each of which can do 8 fused multiply-adds per cycle, has
 a clock rate of 2.4 GHz, and a memory bandwidth of 25.6 GB/s. At what arithmetic
