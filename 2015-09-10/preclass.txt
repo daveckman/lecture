@@ -6,9 +6,22 @@
 2. What is the difference between two cores and one core with
    hyperthreading?
 
+A hyperthreaded core can act as two independent cores. The "processors" created
+by the hyperthreaded core will have shared memory which the standard two cores
+will have their own memories.
+
 3. Do a Google search to find a picture of how memories are arranged
    on the Phi architecture.  Describe the setup briefly in your own
    words.  Is the memory access uniform or non-uniform?
+
+I found pictures of the Phi memory architecture at:
+https://software.intel.com/en-us/articles/intel-xeon-phi-coprocessor-codename-knights-corner
+
+A Xeon Phi coprocessor as 60 nodes, each of which has a private L2 cache that is
+communicated with a tagged directory (in main memory?). An interconnect allows for
+communication between cores. The webpage says that the memory addresses are uniformly
+distributed among the tag directories. From this description, I believe the memory
+access is uniform.
 
 4. Consider the parallel dot product implementations suggested in the
    slides.  As a function of the number of processors, the size of the
