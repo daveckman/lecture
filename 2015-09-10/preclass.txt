@@ -3,6 +3,17 @@
    host cores are used, for the moment).  How do things change with
    the addition of the two Phi boards?
 
+The totient nodes are Intel Xeon E5-2620 v3 processors with 32 GB RAM per node.
+From the preclass questions to 08-27, we calculated that the peak flop rate
+for one of these nodes was 120 GFlops/sec (with Max Turbo). From the spec sheet found
+online, the max memory bandwith is 59 GB/sec. From the roofline model, there is
+a ridgepoint near an operational intensity of 2 flops/byte.
+
+With two Phi boards, we add 2,022 GFlops/sec (again from preclass questions from 08-27)
+to reach a new peak flop rate of 2,142 GFlops/sec. The max memory bandwith of each 
+of these boards is 320 GB/sec. Therefore 59 GB/sec is still the limiting factor.
+The ridgepoint will now move over to an operational intensity of 2,142/59 = 36 flops/byte.
+
 2. What is the difference between two cores and one core with
    hyperthreading?
 
@@ -30,3 +41,20 @@ access is uniform.
    [Note that dot products have low arithmetic intensity -- the
     roofline model may be useful for reasoning about the peak
     performance for computing pieces of the dot product]
+
+Let N be the length of the vectors.
+Suppose it takes A time units to perform an addition operation and M time units to
+perform a multiplication operation (independent of the size of the floating
+point numbers).
+
+The serial time is then: A*N + M*N
+
+If the number of processors is p and the typical time to send a message is t.
+
+Assuming the addition is all done on one node at the end, the parallel time is
+roughly: (N/p)*A + t + M*N.
+
+The speedup would be:
+S(p) = (A*N + M*N)/((N/p)*A + t + M*N)
+
+
