@@ -18,17 +18,44 @@ the glider pattern for a few generations.
     second can we update for a board that fits in L3 cache?  For a
     board that does not fit?
 
+	The L3 cache size on one of the totient nodes is  15 MB. A 32-bit
+	integer takes 4 bytes to store in memory. Therefore
+	15 MB/4 B = 15*1024*1024/4 = 3,932,160 integers can be stored in
+	L3 cache. For a square matrix, this amounts to sqrt(3932160) = 1983
+	as the length of a side of the board.
+
+	I wasn't able to get the basic.c code to run on the cluster.
+	It was resulting in an error.
+
 3.  Assuming that we want to advance time by several generations,
     suggest a blocking strategy that would improve the operational
     intensity of the basic implementation.  Assume the board is
     not dilute, so that we must still consider every cell.  You may
     want to try your hand at implementing your strategy (though you
     need not spend too much time on it).
+	
+	If the code was parallelized according to the domain composition,
+	a blocking strategy could allow the processors to advance a fixed
+	number of generations before stopping to communicate. They could then
+	double-check the states of the cells on the boundary and reconcile and
+	differences that might be caused by how the neighboring cells evolved.
 
 4.  Comment on what would be required to parallelize this code
     according to the domain decomposition strategy outlined in the
     slides.  Do you think you would see good speedups on one of
     the totient nodes?  Why or why not?
+
+	To parallelize the code according to the domain decomposition strategy,
+	we would need to implement a way for processors to share the state of
+	cells at the boundaries of their domains so that they can perform correct
+	updates. Ideally, the domain would be decomposed so that the cells were
+	sorted into clusterings in a way that minimized interations between
+	clusterings.
+
+	I would expect a fair about of speed-up if the boundaries had low volume
+	compared to the interiors of the domains. There would be especially good
+	speedup if the board was dilute because less communication between
+	processors would be needed.
 
 5.  Suppose we want to compute long-range interactions between two
     sets of particles in parallel using the obvious n^2 algorithm in a
@@ -53,3 +80,10 @@ the glider pattern for a few generations.
     Based on what you know about memories and parallel architecture,
     do you see any features of this approach that are likely to lead
     to poor performance?
+
+	As it is, this code will apply the forces on all pairs of
+	particles. However some of these pairwise forces may have
+	an insignificant magnitude and need not be calculated.
+	Furthermore, this methods involves all processors to
+	communicate with all other processors which will be very expensive
+	if the particle data is not stored in a shared cache.
