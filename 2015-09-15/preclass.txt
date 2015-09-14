@@ -8,6 +8,10 @@ the glider pattern for a few generations.
 1.  What are one or two points that you found least clear in the
     9/15 slide decks (including the narration)?
 
+	How can you easily identify where the quiescent parts of the game
+	of life are?
+	I didn't understand what a quadtree or octree was.
+
 2.  In the basic implementation provided, what size board for the Game
     of Life would fit in L3 cache for one of the totient nodes?  Add a
     timer to the code and run on the totient node.  How many cells per
