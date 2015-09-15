@@ -7,7 +7,8 @@ The totient nodes are Intel Xeon E5-2620 v3 processors with 32 GB RAM per node.
 From the preclass questions to 08-27, we calculated that the peak flop rate
 for one of these nodes was 120 GFlops/sec (with Max Turbo). From the spec sheet found
 online, the max memory bandwith is 59 GB/sec. From the roofline model, there is
-a ridgepoint near an operational intensity of 2 flops/byte.
+a ridgepoint near an operational intensity of 2 flops/byte. This is shown in 
+Roofline_figure.png.
 
 With two Phi boards, we add 2,022 GFlops/sec (again from preclass questions from 08-27)
 to reach a new peak flop rate of 2,142 GFlops/sec. The max memory bandwith of each 
