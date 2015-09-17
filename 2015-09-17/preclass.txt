@@ -9,6 +9,11 @@ that you can figure out the numerical jargon.
 1.  What are one or two points that you found least clear in the
     9/17 slide decks (including the narration)?
 
+	I didn't understand what was meant by "stiffness" in analyzing
+	dynamic systems w/ ODEs.
+	The contrast in implicit/explicit time marching in ODEs could have been
+	better explained with an example.
+
 2.  Fill in the most straightforward implementation you can think of
     for multiplying a compressed sparse row matrix by a vector.
     Note: It is fine to look up the answer elsewhere!  If you do,
@@ -27,6 +32,9 @@ that you can figure out the numerical jargon.
           /* Fill in here */
       } 
 
+	I sketched out a short code block to perform the multiplication,
+	but haven't tested it yet.
+
 3.  From the slides, complete the following short code:
 
       double laplacian_u(double (*u)(double x, double y),
@@ -39,6 +47,8 @@ that you can figure out the numerical jargon.
     laplacian_u is a C function pointer -- within the function,
     it can be called in the same way as an ordinary function (i.e.
     u(x,y)).  See the laplace2d.c code in this directory as an example.
+
+	It wasn't clear to me how to calculate the Laplacian numerically.
 
 4.  In one space dimension, the following numerical scheme
     approximately solves the wave equation

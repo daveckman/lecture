@@ -15,7 +15,12 @@ typedef struct csr_t {
 void sparse_multiply(csr_t* A, double* x, double* result)
 {
     memset(result, 0, A->n * sizeof(double));
-    /* Fill in here */
+        for (i=0, i < 4, ++i) {
+            result[i] = 0;
+            for (j=ptr[i], j < ptr[i+1], ++j) {
+                result[i] += pr[j]*x[col[j]];
+            }
+        }
 } 
 
 
