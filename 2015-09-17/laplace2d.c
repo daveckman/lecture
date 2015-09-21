@@ -11,7 +11,10 @@ double u(double x, double y)
 double laplacian_u(double (*u)(double x, double y),
                    double h, double x, double y)
 {
-    /* Fill in the solution here */
+	double laplacian_x, laplacian_y;
+	laplacian_x = (1/(h^2))*(u(x-h,y) - 2*u(x,y) + u(x+h,y));
+	laplacian_y = (1/(h^2))*(u(x,y-h) - 2*u(x,y) + u(x,y+h));
+	return laplacian_x + laplacian_y;
 }
 
 

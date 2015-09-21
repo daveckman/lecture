@@ -6,8 +6,16 @@ that you can figure out the numerical jargon.
 
 0.  How much time did you spend on this pre-class exercise, and when?
 
+	About 70 minutes split between the night before class and the
+	afternoon after class.
+
 1.  What are one or two points that you found least clear in the
     9/17 slide decks (including the narration)?
+
+	I didn't understand what was meant by "stiffness" in analyzing
+	dynamic systems w/ ODEs.
+	The contrast in implicit/explicit time marching in ODEs could have been
+	better explained with an example.
 
 2.  Fill in the most straightforward implementation you can think of
     for multiplying a compressed sparse row matrix by a vector.
@@ -24,7 +32,13 @@ that you can figure out the numerical jargon.
     
       void sparse_multiply(csr_t* A, double* x, double* result)
       {
-          /* Fill in here */
+	    memset(result, 0, A->n * sizeof(double));
+            for (i=0, i < n, ++i) {
+            	result[i] = 0;
+            	for (j=ptr[i], j < ptr[i+1], ++j) {
+                    result[i] += pr[j]*x[col[j]];
+            	}
+            }
       } 
 
 3.  From the slides, complete the following short code:
@@ -32,7 +46,10 @@ that you can figure out the numerical jargon.
       double laplacian_u(double (*u)(double x, double y),
                          double h, double x, double y)
       {
-          /* Estimate the Laplacian applied to u at (x,y) */
+          double laplacian_x, laplacian_y;
+	  laplacian_x = (1/(h^2))*(u(x-h,y) - 2*u(x,y) + u(x+h,y));
+	  laplacian_y = (1/(h^2))*(u(x,y-h) - 2*u(x,y) + u(x,y+h));
+	  return laplacian_x + laplacian_y;
       }
 
     If you are unfamiliar with the syntax, the first argument to
@@ -61,3 +78,14 @@ that you can figure out the numerical jargon.
     several steps without communicating, can you describe how to
     similarly advance this scheme?  Are there any advantages to such
     an organization if there is only one core available?
+
+	Similar to the game of life, the cores will need to keep track of ghost grid nodes.
+	If we want to advance n time steps, we'll need a buffer of n grid nodes on both
+	the left and right. The cores will each be responsible for a set of grid nodes. We
+	can then advance time on all cores and the state of their "owned" grid nodes will
+	all be accurate. After the update, the cores will need to communicate.
+
+	If there is only one core, it seems to be like additional overhead to do this
+	explicit time stepping method. The only benefit I can think of is that if the
+	nodes were partitioned into smaller blocks that would fit better in cache, their
+	might be gains in memory access by splitting up the workload for the core.
