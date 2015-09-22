@@ -3,6 +3,9 @@
 1.  What are one or two points that you found least clear in the
     9/22 slide decks (including the narration)?
 
+	It was unclear what was meant by the terms "lexical scoping"
+	and "data pace".
+
 2.  The pthread_mc.c file in the demo subdirectory runs a Monte Carlo
     simulation to estimate the expected value of a uniform random
     variable.  The "-p" option sets the number of processors used,
@@ -13,16 +16,52 @@
        time per trial (t_trial), and time to update the global
        counters in the critical section (t_update).
 
+	Assume p > 2 so that we have some level of parallelization.
+
+	Let nbatch be the size of a batch of calculations being performed
+	by a processor before synchronization. Then a model of the run time
+	is the sum of the computation time (done in parallel) and the
+	synchronization time (done in serial).
+
+	t_elapsed = (N/p)*t_trial + t_update*(N/(p*nbatch))
+
     b) Run the code with a few different parameter values in order
        to estimate N, t_trial, and t_update for this code on
        a totient compute node.
+
+	nbatch = 500 / p = 1 : n_trials = 1000500 trials & t_elapsed = 3.3866e-02
+	nbatch = 500 / p = 8 : n_trials = 1004000 trials & t_elapsed = 1.7592e-02
+	nbatch = 500 / p = 16 : n_trials = 1008000 trials & t_elapsed = 1.7946e-02
+	nbatch = 500 / p = 32 : n_trials = 1016000 trials & t_elapsed = 1.868000e-02
+
+	I have yet to estimate N, t_trial and t_update from these run results.
 
     c) Based on your model, suggest a strategy for choosing the batch
        size.  How might you generalize this strategy to automatically
        choose batch sizes for different types of computational
        experiments?
+
+	We would like to choose the largest batchsize until the costs of
+	running extra (wasted) trials becomes too high. We must also be concerned
+	the processor time wasted by waiting for the slowest processor to
+	finish its batch.
+
+	Since nbatch only appears once in my model, it doesn't capture
+	the tradeoffs discussed above. If my model did, then we
+	would wish to solve for the nbatch that minimizes the run time.
     
 3.  In the workq subdirectory of this directory, there is a basic work
     queue implementation.  Following the strategy outlined in the
     slides, add synchronization calls in the locations marked TODO.
     You should run the code to make sure it behaves as expected!
+
+	I've been getting the following error when making the workq file.
+	I wasn't able to start adding the synchronization calls. It was
+	unclear which type of synchronization I should be using
+	(mutex/conditionals/barriers).
+
+workq.c: In function ‘consumer_main’:
+workq.c:225:5: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
+     for (char* t = (char*) workq_get(workq);
+     ^
+workq.c:225:5: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code

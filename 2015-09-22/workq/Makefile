@@ -1,5 +1,7 @@
 .PHONY: test
 
+LFLAGS=-std=c99 -lm 
+
 test: workq
 	./workq 4
 
