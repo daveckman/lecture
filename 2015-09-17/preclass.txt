@@ -6,6 +6,9 @@ that you can figure out the numerical jargon.
 
 0.  How much time did you spend on this pre-class exercise, and when?
 
+	About 70 minutes split between the night before class and the
+	afternoon after class.
+
 1.  What are one or two points that you found least clear in the
     9/17 slide decks (including the narration)?
 
@@ -29,26 +32,30 @@ that you can figure out the numerical jargon.
     
       void sparse_multiply(csr_t* A, double* x, double* result)
       {
-          /* Fill in here */
+	    memset(result, 0, A->n * sizeof(double));
+            for (i=0, i < n, ++i) {
+            	result[i] = 0;
+            	for (j=ptr[i], j < ptr[i+1], ++j) {
+                    result[i] += pr[j]*x[col[j]];
+            	}
+            }
       } 
-
-	I sketched out a short code block to perform the multiplication,
-	but haven't tested it yet.
 
 3.  From the slides, complete the following short code:
 
       double laplacian_u(double (*u)(double x, double y),
                          double h, double x, double y)
       {
-          /* Estimate the Laplacian applied to u at (x,y) */
+          double laplacian_x, laplacian_y;
+	  laplacian_x = (1/(h^2))*(u(x-h,y) - 2*u(x,y) + u(x+h,y));
+	  laplacian_y = (1/(h^2))*(u(x,y-h) - 2*u(x,y) + u(x,y+h));
+	  return laplacian_x + laplacian_y;
       }
 
     If you are unfamiliar with the syntax, the first argument to
     laplacian_u is a C function pointer -- within the function,
     it can be called in the same way as an ordinary function (i.e.
     u(x,y)).  See the laplace2d.c code in this directory as an example.
-
-	It wasn't clear to me how to calculate the Laplacian numerically.
 
 4.  In one space dimension, the following numerical scheme
     approximately solves the wave equation
@@ -71,3 +78,14 @@ that you can figure out the numerical jargon.
     several steps without communicating, can you describe how to
     similarly advance this scheme?  Are there any advantages to such
     an organization if there is only one core available?
+
+	Similar to the game of life, the cores will need to keep track of ghost grid nodes.
+	If we want to advance n time steps, we'll need a buffer of n grid nodes on both
+	the left and right. The cores will each be responsible for a set of grid nodes. We
+	can then advance time on all cores and the state of their "owned" grid nodes will
+	all be accurate. After the update, the cores will need to communicate.
+
+	If there is only one core, it seems to be like additional overhead to do this
+	explicit time stepping method. The only benefit I can think of is that if the
+	nodes were partitioned into smaller blocks that would fit better in cache, their
+	might be gains in memory access by splitting up the workload for the core.
