@@ -1,12 +1,10 @@
 .PHONY: test
 
-LFLAGS=-std=c99 -lm 
-
 test: workq
 	./workq 4
 
 workq: workq.o 
-	$(CC) -o $@ $^ -lpthread -lm
+	$(CC) -o $@ $^ -lpthread -lm -std=c99
 
 %.o: %.c
 	$(CC) -c -O3 $<
