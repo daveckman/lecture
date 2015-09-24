@@ -17,6 +17,10 @@
        to estimate N, t_trial, and t_update for this code on
        a totient compute node.
 
+	Results from class demonstration:
+	t_update ~= 5.336e-08 
+	t_trial ~= 6.966e-09 
+
     c) Based on your model, suggest a strategy for choosing the batch
        size.  How might you generalize this strategy to automatically
        choose batch sizes for different types of computational
@@ -26,3 +30,12 @@
     performance and correctness) in OpenMP codes.  Go through the
     checklist in the paper for omp_mc.c.  What performance mistakes
     are there in the demonstration implementation?
+
+	In the critical section within thread_main( ), we can take the
+	done_flag update operation and put it in a separate atomic section.
+	This would cut down on the time all processors spend in the critical
+	section.
+
+	We may also want to do a flush() operation when we read a shared
+	variable like nbatch, but it probably doesn't matter in this setting
+	because nbatch remains constant.
