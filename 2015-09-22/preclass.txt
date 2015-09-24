@@ -19,14 +19,19 @@
        time per trial (t_trial), and time to update the global
        counters in the critical section (t_update).
 
-	Assume p > 2 so that we have some level of parallelization.
+	Assume p > 2 so that we have some level of parallelization and that
+	the synchonization time t_update must be performed for each processor
+	during an update phase.
 
-	Let nbatch be the size of a batch of calculations being performed
+	Let B be the size of a batch of calculations being performed
 	by a processor before synchronization. Then a model of the run time
 	is the sum of the computation time (done in parallel) and the
 	synchronization time (done in serial).
 
-	t_elapsed = (N/p)*t_trial + t_update*(N/(p*nbatch))
+	t_elapsed = (N/p)*t_trial + (N/B)*t_update
+
+	The first term is the time spent on the experiments.
+	The second term is the time in the critical section.
 
     b) Run the code with a few different parameter values in order
        to estimate N, t_trial, and t_update for this code on
@@ -37,7 +42,12 @@
 	nbatch = 500 / p = 16 : n_trials = 1008000 trials & t_elapsed = 1.7946e-02
 	nbatch = 500 / p = 32 : n_trials = 1016000 trials & t_elapsed = 1.868000e-02
 
-	I have yet to estimate N, t_trial and t_update from these run results.
+	I changed the parameter p (the number of threads) instead of
+	nbatch so I will need to redo the experiment.
+
+	Results from class were
+	t_update = 3.0637e-07
+	t_trial = 2.5561e-08
 
     c) Based on your model, suggest a strategy for choosing the batch
        size.  How might you generalize this strategy to automatically
@@ -59,12 +69,12 @@
     You should run the code to make sure it behaves as expected!
 
 	I've been getting the following error when making the workq file.
-	I wasn't able to start adding the synchronization calls. It was
-	unclear which type of synchronization I should be using
-	(mutex/conditionals/barriers).
 
 workq.c: In function ‘consumer_main’:
 workq.c:225:5: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
      for (char* t = (char*) workq_get(workq);
      ^
 workq.c:225:5: note: use option -std=c99, -std=gnu99, -std=c11 or -std=gnu11 to compile your code
+
+	Other than this error, I believe I added all the synchronization
+	features mentioned in class.
