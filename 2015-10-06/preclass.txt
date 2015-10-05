@@ -12,7 +12,63 @@
     a) Make sure the cs5220 module is loaded and type "which mpicc";
        if everything is correct, you should see the Intel MPI version
        (under /usr/local/intel).  Using this version of MPI and the
-       default PBS files, run the pingpong examples (demo/pingpong).
+       default PBS files, run the pingpong examples (demo/pingpong).cd 
+
+       I typed "which mpicc" into the command line and got:
+       /usr/local/intel/impi/5.0.3.048/intel64/bin/mpicc
+
+       When running from the head node, I was getting the following timings:
+
+        ping-2chip:
+
+1 3.16668e-05
+1001 3.26979e-05
+2001 3.47982e-05
+3001 3.93244e-05
+4001 4.01574e-05
+5001 3.83895e-05
+6001 3.72031e-05
+7001 3.84844e-05
+8001 4.1189e-05
+9001 4.17258e-05
+10001 4.1652e-05
+11001 4.39545e-05
+12001 4.53481e-05
+13001 4.68426e-05
+
+        ping-2core:
+
+1 3.13316e-05
+1001 3.06785e-05
+2001 3.18814e-05
+3001 3.44586e-05
+4001 3.8163e-05
+5001 3.83865e-05
+6001 4.06338e-05
+7001 4.11608e-05
+8001 3.93461e-05
+9001 3.90448e-05
+10001 4.13753e-05
+11001 4.5157e-05
+12001 4.61774e-05
+13001 4.71598e-05
+
+        ping-2node:
+
+1 5.33065e-07
+1001 1.0597e-06
+2001 1.41042e-06
+3001 1.75991e-06
+4001 2.12973e-06
+5001 2.53343e-06
+6001 2.84301e-06
+7001 3.23006e-06
+8001 3.6342e-06
+9001 4.01767e-06
+10001 4.32773e-06
+11001 4.67159e-06
+12001 5.07408e-06
+13001 5.27382e-06
 
     b) Now do "module load openmpi/1.10.0-icc-15.0.3" after loading
        the CS 5220 module.  Check by typing "which mpicc" that you
@@ -21,7 +77,63 @@
        you will have to add a module load to the start of the PBS
        scripts).  How do the timings differ from the Intel MPI timings?
 
+ping-2chip:
+
+1 4.6945e-06
+1001 5.39878e-06
+2001 5.84596e-06
+3001 6.1339e-06
+4001 6.21114e-06
+5001 1.55661e-05
+6001 1.54233e-05
+7001 1.66009e-05
+8001 1.69971e-05
+9001 1.67676e-05
+10001 1.66454e-05
+11001 1.73151e-05
+12001 1.75394e-05
+13001 1.74685e-05
+
+ping-2core:
+
+1 4.57792e-06
+1001 5.31886e-06
+2001 5.65042e-06
+3001 5.61731e-06
+4001 6.53059e-06
+5001 1.03302e-05
+6001 1.1014e-05
+7001 1.10079e-05
+8001 1.10243e-05
+9001 1.11161e-05
+10001 1.14791e-05
+11001 1.03759e-05
+12001 1.09015e-05
+13001 1.21965e-05
+
+ping-2node:
+
+1 4.02354e-07
+1001 1.0471e-06
+2001 1.42149e-06
+3001 1.71687e-06
+4001 2.03063e-06
+5001 3.91693e-06
+6001 4.45819e-06
+7001 4.78931e-06
+8001 5.08152e-06
+9001 5.37272e-06
+10001 5.72558e-06
+11001 6.11674e-06
+12001 6.30148e-06
+13001 6.50087e-06
+
     c) When running at the peak rate (e.g. 16 double precision
        flops/cycle), how many (double precision) floating point ops
        could two totient cores do in the minimal time required for one
        MPI message exchange?
+
+       A single totient core has a peak flop rate of 120 gigaflops/second (from preclass 9-27).
+
+       If the peak rate is 16 double precision flops/cycle and the frequency of 2.5 GHz (with Turbo burst),
+       the peak rate is 40 billion double precision flops / second.
