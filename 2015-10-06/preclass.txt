@@ -36,6 +36,8 @@
 12001 4.53481e-05
 13001 4.68426e-05
 
+Estimated average ping time: 1e-03 seconds/ping
+
         ping-2core:
 
 1 3.13316e-05
@@ -53,7 +55,9 @@
 12001 4.61774e-05
 13001 4.71598e-05
 
-        ping-2node:
+Estimated average ping time: 1e-03 seconds/ping
+
+        ping-2node: 
 
 1 5.33065e-07
 1001 1.0597e-06
@@ -69,6 +73,8 @@
 11001 4.67159e-06
 12001 5.07408e-06
 13001 5.27382e-06
+
+Estimated average ping time: 4e-04 seconds/ping
 
     b) Now do "module load openmpi/1.10.0-icc-15.0.3" after loading
        the CS 5220 module.  Check by typing "which mpicc" that you
@@ -94,6 +100,8 @@ ping-2chip:
 12001 1.75394e-05
 13001 1.74685e-05
 
+Estimated average ping time: 3e-04 seconds/ping
+
 ping-2core:
 
 1 4.57792e-06
@@ -110,6 +118,8 @@ ping-2core:
 11001 1.03759e-05
 12001 1.09015e-05
 13001 1.21965e-05
+
+Estimated average ping time: 1e-04 seconds/ping
 
 ping-2node:
 
@@ -128,6 +138,11 @@ ping-2node:
 12001 6.30148e-06
 13001 6.50087e-06
 
+Estimated average ping time: 3e-04 seconds/ping
+
+Based on the calculations above, the Intel MPI is about three times faster for
+the 2-chip and 2-core cases, and no different for the 2-node case.
+
     c) When running at the peak rate (e.g. 16 double precision
        flops/cycle), how many (double precision) floating point ops
        could two totient cores do in the minimal time required for one
@@ -137,3 +152,7 @@ ping-2node:
 
        If the peak rate is 16 double precision flops/cycle and the frequency of 2.5 GHz (with Turbo burst),
        the peak rate is 40 billion double precision flops / second.
+
+For the two core case, the Intel MPI has a rate of 1e-04 seconds/ping. Multiplying together gives
+
+	40 Gflops/s * 1e-04 s/ping = 400,000 operations/ping.
