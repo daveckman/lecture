@@ -1,7 +1,11 @@
 0.  How much time did you spend on this pre-class exercise, and when?
 
+  1 hour
+
 1.  What are one or two points that you found least clear in the
     10/06 slide decks (including the narration)?
+
+  The MPI documentation was rather tedious.
 
 2.  In the upcoming lecture (10/8), we will discuss how to model
     latency and bandwidth of MPI sends and receives using the
